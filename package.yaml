@@ -1,0 +1,94 @@
+name:                polysemy-test
+version:             0.1.0.0
+github:              "githubuser/polysemy-test"
+license:             BSD3
+author:              "Author name here"
+maintainer:          "example@example.com"
+copyright:           "2021 Author name here"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+ghc-options:
+  # Recommended settings for polysemy
+  - -O2
+  - -flate-specialise
+  - -fspecialise-aggressively
+  - -fplugin=Polysemy.Plugin
+  # Useful warnings
+  - -Wall
+  - -Wcompat
+  - -Wredundant-constraints
+  - -Wincomplete-record-updates
+  - -Wincomplete-uni-patterns
+
+default-extensions:
+  # Recommended extensions for polysemy
+  - DataKinds
+  - FlexibleContexts
+  - GADTs
+  - LambdaCase
+  - PolyKinds
+  - RankNTypes
+  - ScopedTypeVariables
+  - TypeApplications
+  - TypeOperators
+  - TypeFamilies
+  - TemplateHaskell
+
+  # Deriving extensions
+  - GeneralizedNewtypeDeriving
+  - DeriveGeneric
+
+  # Misc extensions
+  - OverloadedStrings
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/githubuser/polysemy-test#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- polysemy
+- polysemy-plugin
+- polysemy-zoo
+- bytestring
+- cryptonite
+- memory
+- sqlite-simple
+- containers
+
+library:
+  source-dirs: src
+
+executables:
+  polysemy-test-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - polysemy-test
+
+tests:
+  polysemy-test-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - polysemy-test
+    - hspec
+    - QuickCheck
+    - quickcheck-instances
+
