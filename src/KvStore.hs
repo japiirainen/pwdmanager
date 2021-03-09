@@ -13,33 +13,31 @@ import Polysemy.KVStore (KVStore (..))
 import qualified Polysemy.State as PS
 import Types
 
-runKvStoreAsSQLite ::
+runKVStoreAsSQLite ::
   Member (Embed IO) r =>
   Sem (KVStore Username PasswordHash : r) a ->
   Sem (PI.Input SQL.Connection : r) a
-runKvStoreAsSQLite = reinterpret $ \case
-  LookupKV uname -> do
+runKVStoreAsSQLite = P.reinterpret $ \case
+  LookupKV username -> do
     conn <- PI.input
     hashes <-
-      P.embed
-        ( SQL.queryNamed
-            conn
-            "SELECT hash FROM passwords WHERE username = :uname",
-          [":uname" := uname]
-        )
-    return
-      (fromOnly <$> listToMaybe hashes)
-  UpdateKV uname maybeHash -> do
-    let (query, params) = case maybeHash of
-          Just hash ->
-            ( "INSERT INTO passwords (username, hash)"
-                <> "VALUES (:username, :hash)"
-                <> "ON CONFLICT (username) DO UPDATE SET hash = excluded.hash",
-              [":username" := uname, ":hash" := hash]
-            )
-          Nothing ->
-            ( "DELETE FROM passwords WHERE username = :username",
-              [":username" := uname]
-            )
+      P.embed $
+        SQL.queryNamed
+          conn
+          "SELECT hash FROM passwords WHERE username = :username"
+          [":username" := username]
+    return (SQL.fromOnly <$> listToMaybe hashes)
+  UpdateKV username maybeHash -> do
+    let (query, params) =
+          case maybeHash of
+            Just hash ->
+              ( "INSERT INTO passwords (username, hash) VALUES (:username, :hash) "
+                  <> "ON CONFLICT (username) DO UPDATE SET hash = excluded.hash",
+                [":username" := username, ":hash" := hash]
+              )
+            Nothing ->
+              ( "DELETE FROM passwords WHERE username = :username",
+                [":username" := username]
+              )
     conn <- PI.input
     P.embed $ SQL.executeNamed conn query params
