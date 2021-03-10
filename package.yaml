@@ -68,7 +68,7 @@ library:
   source-dirs: src
 
 executables:
-  polysemy-test-exe:
+  main:
     main:                Main.hs
     source-dirs:         app
     ghc-options:

@@ -1,6 +1,14 @@
-module Lib where
+module Lib
+  ( addUser,
+    validatePassword,
+    module Types,
+    runKVStoreAsSQLite,
+    module CryptoHash,
+  )
+where
 
 import CryptoHash
+import KvStore
 import Polysemy (Members, Sem)
 import Polysemy.KVStore (KVStore, lookupKV, writeKV)
 import Types

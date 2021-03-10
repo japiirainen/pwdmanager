@@ -1,16 +1,12 @@
-module KvStore where
+module KvStore (runKVStoreAsSQLite) where
 
-import qualified Crypto.Random as CR
-import CryptoHash
-import Data.Function ((&))
 import Data.Maybe (listToMaybe)
 import Database.SQLite.Simple (NamedParam ((:=)))
 import qualified Database.SQLite.Simple as SQL
-import Polysemy (Embed, Member, Members, Sem)
+import Polysemy (Embed, Member, Sem)
 import qualified Polysemy as P
 import qualified Polysemy.Input as PI
 import Polysemy.KVStore (KVStore (..))
-import qualified Polysemy.State as PS
 import Types
 
 runKVStoreAsSQLite ::

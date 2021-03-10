@@ -22,7 +22,7 @@ validateHash pwd hash = P.send (ValidateHash pwd hash :: CryptoHash (Sem r) Bool
 -- | implementation
 runCryptoHashAsState :: (CR.DRG gen, Member (State gen) r) => Sem (CryptoHash : r) a -> Sem r a
 runCryptoHashAsState = P.interpret $ \case
-  ValidateHash pwd hash -> return (BCrypt.validatePassword pwd hash)
+  ValidateHash pwd hash -> return $ BCrypt.validatePassword pwd hash
   MakeHash pwd -> do
     drg <- PS.get
     let (hash, drg') = CR.withDRG drg $ BCrypt.hashPassword 5 pwd

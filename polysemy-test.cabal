@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0d3363e742e84c343b00342aba4c0e521e780847b5eb5bf8c19bb8458d221725
+-- hash: 266580660e399293798477c9c81eeae143bbdc9ccf6de7e3d8e17acae862c2e0
 
 name:           polysemy-test
 version:        0.1.0.0
@@ -49,7 +49,7 @@ library
     , sqlite-simple
   default-language: Haskell2010
 
-executable polysemy-test-exe
+executable main
   main-is: Main.hs
   other-modules:
       Paths_polysemy_test
