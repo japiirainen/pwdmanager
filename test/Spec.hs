@@ -14,12 +14,12 @@ import Test.Hspec
 import Test.QuickCheck
 import Test.QuickCheck.Instances ()
 
-runAllEffects ::
+runAllEffectsPure ::
   CR.DRG gen =>
   gen ->
   (forall r. Members [CryptoHash, KVStore Username PasswordHash] r => Sem r a) ->
   a
-runAllEffects drg program =
+runAllEffectsPure drg program =
   program
     & runCryptoHashAsState
     & KV.runKVStorePurely Map.empty
@@ -34,9 +34,9 @@ main = do
   hspec $
     describe "basic validation" $
       it "password added can be validated" $
-        property $ \user pass -> addAndValidate drg (Username user) (Password pass) === True
+        property $ \uname pass -> addAndValidate drg (Username uname) (Password pass) === True
   where
     addAndValidate :: CR.DRG gen => gen -> Username -> Password -> Bool
-    addAndValidate drg user pwd = runAllEffects drg $ do
-      addUser user pwd
-      validatePassword user pwd
+    addAndValidate drg uname pwd = runAllEffectsPure drg $ do
+      addUser uname pwd
+      validatePassword uname pwd
